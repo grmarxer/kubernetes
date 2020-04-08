@@ -7,26 +7,26 @@
 ## Preparing the Ubuntu Server
 
 __Make sure you are running Ubuntu 16.04 on your Kube nodes__  
-#lsb_release -a
+```lsb_release -a```
 
 __Update Ubuntu__  
-#apt-get update -y  
-#apt-get upgrade -y
+```apt-get update -y```  
+```apt-get upgrade -y```
 
 __Disable firewall ubuntu__  
-#ufw disable
+```ufw disable```
 
 __selinux not installed by default__  
-#sestatus should fail
+```sestatus should fail```
 
 __NTP installed by default__  
 Verify NTP is in sync  
-#timedatectl
+```timedatectl```
 
 ## Install Docker
-#apt-get update && apt-get install apt-transport-https ca-certificates curl software-properties-common
+```apt-get update && apt-get install apt-transport-https ca-certificates curl software-properties-common```
 
-#curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+```curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -```
 ```
  add-apt-repository \
   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
@@ -34,7 +34,7 @@ Verify NTP is in sync
   stable"
 ```
 
-#apt-get update && apt-get install docker-ce=18.06.2~ce~3-0~ubuntu -y
+```apt-get update && apt-get install docker-ce=18.06.2~ce~3-0~ubuntu -y```
 ```
  cat > /etc/docker/daemon.json <<EOF
 {
@@ -47,31 +47,31 @@ Verify NTP is in sync
 }
 EOF
 ```
-#mkdir -p /etc/systemd/system/docker.service.d  
-#systemctl daemon-reload  
-#systemctl restart docker  
+```mkdir -p /etc/systemd/system/docker.service.d```  
+```systemctl daemon-reload```  
+```systemctl restart docker```  
 
 ## Disable SWAP Memory on kube nodes
 Disable swap in current session  
-#swapoff -a
+```swapoff -a```
 
 Disable swap permanently - comment out the "swap" line in this file  
-#vi /etc/fstab
+```vi /etc/fstab```
 
 ## Install Kube
 
-#apt-get update &&  apt-get install -y apt-transport-https curl
+```apt-get update &&  apt-get install -y apt-transport-https curl```
 
-#curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg |  apt-key add -
+```curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg |  apt-key add -```
 
 ```
 cat <<EOF |  tee /etc/apt/sources.list.d/kubernetes.list
 deb https://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 ```
-#apt-get update
-#apt-get install -y kubelet kubeadm kubectl
-#apt-mark hold kubelet kubeadm kubectl
+```apt-get update
+apt-get install -y kubelet kubeadm kubectl
+apt-mark hold kubelet kubeadm kubectl```
 
 <br/><br/>
 ## *Repeat the steps above for all nodes in your kube cluster* 

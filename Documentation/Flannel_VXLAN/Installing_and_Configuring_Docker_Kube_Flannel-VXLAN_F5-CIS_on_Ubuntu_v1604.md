@@ -86,10 +86,10 @@ EOF
 
 
 ## Configure BIG-IP to support the underlay network (reference the diagram for this procedure)
-Create the underlay network vlan (the vlan name in this environment is vnic5 and bound to interface 1.1)
+Create the underlay network vlan (the vlan name in this environment is vnic5 and bound to interface 1.1)  
 ```tmsh create net vlan vnic5 interfaces add { 1.1 }```
 
-Create the underlay network self-ip (in this environment the self-ip is 172.22.10.1/24)
+Create the underlay network self-ip (in this environment the self-ip is 172.22.10.1/24)  
 ```tmsh create net self 172.22.10.1 address 172.22.10.1/24 allow-service all vlan vnic5```
 
 ## Initialize Kube (Performed on the Kube Master ONLY)
@@ -154,10 +154,10 @@ Command to create flannel deployment
 ```kubectl create -f kube-flannel.yaml```  
 
 Verify flannel is running on your master node  
-```kubectl get pods --all-namespaces -o wide | grep flannel```
-```
+```kubectl get pods --all-namespaces -o wide | grep flannel```  
+  
 kube-system   kube-flannel-ds-amd64-dhrfl     1/1     Running   0   73s   172.22.10.10   kube8   <none>   <none>
-```
+
 
 ## Join worker node to the kube master  (Performed on Kube Worker Nodes)
 On each of your worker nodes run the link below specific to your environment that you copied above.
@@ -171,3 +171,53 @@ If you lost the join token run this command on the master
 Run the following commands on the master node to ensure all nodes are up and ready and running flannel  
 ```kubectl get nodes```  
 ```kubectl get pods --all-namespaces -o wide```
+
+## Preparing BIG-IP to Connect to the KUBE cluster for CIS using Flannel VXLAN (Performed on BIG-IP)  
+1. v16 license or newer is required on your BIG-IP  
+2. Create a partition "kubernetes" with a default RD of zero  
+3. If you are using a BIG-IP version prior to 14.0, before you can use the Configuration utility, you must enable the framework using the BIG-IP command line.   
+  
+        From the CLI, type the following command: touch /var/config/rest/iapps/enable.  
+4. Download and install the latest AS3 RPM file on BIG-IP  ( f5-appsvcs-3.18.0-4.noarch.rpm )  When writing this document v3.18 was the latest.  
+  
+       https://clouddocs.f5.com/products/extensions/f5-appsvcs-extension/latest/userguide/installation.html  
+         
+       https://github.com/F5Networks/f5-appsvcs-extension/releases  
+
+## Setting up BIG-IP Overlay network for Flannel VXLAN (Performed on BIG-IP)  
+Create VXLAN tunnel profile on BIG-IP  
+
+__Note:__ We use port 8472 as most linux systems default port for VXLAN is 8472  
+
+```tmsh create net tunnels vxlan fl-vxlan port 8472 flooding-type none```  
+
+Create the VXLAN tunnel on BIG-IP using the tunnel name of __flannel_vxlan__ and the local address of your BIG-IP underlay network. 
+
+__Note:__ The name __flannel_vxlan__ has significance and will be an argument in your CIS deployment.  They must match if you decide to alter the name from what I have here.  
+I also used a MTU of 1450 which is the default for most Flannel systems Flannel.  You can use PMTU but I wanted to hard cord my MTU in my environment.  
+```tmsh create net tunnels tunnel flannel_vxlan key 1 profile fl-vxlan local-address 172.22.10.1 mtu 1450```
+
+
+Create the BIG-IP Overlay VXLAN tunnel self-ip.  
+
+__NOTE:___  The subnet mask here must match that of your flannel network -- in this  environment it is 255.255.0.0  
+
+```tmsh create net self 10.244.254.1 address 10.244.254.1/16 allow-service none vlan flannel_vxlan```
+
+
+Find the VTEP MAC address for the self-ip you just created.  You can either use the tmsh command below or ifconfig flannel_vxlan to find the MAC address.  
+
+__Note:__ You will need this MAC address later when you create your BIG-IP Kube node on your Kube Master.  
+
+```tmsh show net tunnels tunnel flannel_vxlan all-properties```
+```
+-------------------------------------------------
+Net::Tunnel: flannel_vxlan
+-------------------------------------------------
+MAC Address                     00:0c:29:0c:7f:32
+Interface Name                      flannel_vxlan
+```
+```[root@flannel-bigip-15-1-0-2:Active:Standalone] config # ifconfig flannel_vxlan
+flannel_vxlan: flags=4291<UP,BROADCAST,RUNNING,NOARP,MULTICAST>  mtu 1450
+        ether 00:0c:29:0c:7f:32  txqueuelen 1000  (Ethernet)  
+```

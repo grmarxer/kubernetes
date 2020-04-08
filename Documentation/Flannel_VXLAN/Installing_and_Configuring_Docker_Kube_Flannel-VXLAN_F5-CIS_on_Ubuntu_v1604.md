@@ -5,9 +5,10 @@
 - As of v16 of the Virtual Edition licenses you no longer need the SDN services license for VXLAN -- the SDN services license in now included with all v16 licenses and beyond  
 
 __TIP:__ Make sure your default route is configured on the correct Kube interface.  
-
+  
 
 <br/>  
+  
 ![Image](https://github.com/grmarxer/kubernetes/blob/master/Documentation/Flannel_VXLAN/diagrams/FlannelVXLAN_Lab_drawing_040620.png)  
 
 

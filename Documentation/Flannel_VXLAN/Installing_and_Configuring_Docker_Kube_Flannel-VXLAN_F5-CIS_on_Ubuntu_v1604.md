@@ -73,7 +73,6 @@ EOF
 ```apt-get install -y kubelet kubeadm kubectl```
 ```apt-mark hold kubelet kubeadm kubectl```  
 
-
 <br/><br/>
 ## *Repeat the steps above for all nodes in your kube cluster* 
 <br/><br/>

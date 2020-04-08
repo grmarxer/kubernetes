@@ -69,9 +69,10 @@ cat <<EOF |  tee /etc/apt/sources.list.d/kubernetes.list
 deb https://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 ```
-```apt-get update
-apt-get install -y kubelet kubeadm kubectl
-apt-mark hold kubelet kubeadm kubectl```
+```apt-get update```
+```apt-get install -y kubelet kubeadm kubectl```
+```apt-mark hold kubelet kubeadm kubectl```  
+
 
 <br/><br/>
 ## *Repeat the steps above for all nodes in your kube cluster* 
@@ -129,7 +130,7 @@ There are two sections of this file you may want to edit to match your environme
         args:
         - --ip-masq
         - --kube-subnet-mgr
-        - --iface=ens192
+      __- --iface=ens192__
 ```
 Flannel will bind by default to the first interface on your kube nodes.  In my environment the first interface is ens160 which is my management interface. I want flannel to bind to my underlay network interface which is ens192 so I added the argument above under containers.
 

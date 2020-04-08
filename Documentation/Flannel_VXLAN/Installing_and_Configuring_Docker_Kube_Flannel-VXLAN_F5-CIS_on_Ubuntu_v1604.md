@@ -13,7 +13,6 @@ __TIP:__ Make sure your default route is configured on the correct Kube interfac
 
 
 <br/>  
-<br/>  
 
 ## Preparing the Ubuntu Server
 
@@ -33,6 +32,8 @@ __selinux is not installed by default__
 __NTP installed by default__  
 Verify NTP is in sync  
 ```timedatectl```
+
+<br/>  
 
 ## Install Docker
 ```apt-get update && apt-get install apt-transport-https ca-certificates curl software-properties-common```
@@ -62,12 +63,16 @@ EOF
 ```systemctl daemon-reload```  
 ```systemctl restart docker```  
 
+<br/>  
+
 ## Disable SWAP Memory on kube nodes
 Disable swap in current session  
 ```swapoff -a```
 
 Disable swap permanently - comment out the "swap" line in this file  
 ```vi /etc/fstab```
+
+<br/>  
 
 ## Install Kube
 
@@ -96,6 +101,8 @@ Create the underlay network vlan (the vlan name in this environment is vnic5 and
 
 Create the underlay network self-ip (in this environment the self-ip is 172.22.10.1/24)  
 ```tmsh create net self 172.22.10.1 address 172.22.10.1/24 allow-service all vlan vnic5```
+
+<br/> 
 
 ## Initialize Kube (Performed on the Kube Master ONLY)
 

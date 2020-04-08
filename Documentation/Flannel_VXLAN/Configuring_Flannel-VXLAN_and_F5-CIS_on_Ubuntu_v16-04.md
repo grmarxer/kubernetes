@@ -256,7 +256,7 @@ flannel_vxlan: flags=4291<UP,BROADCAST,RUNNING,NOARP,MULTICAST>  mtu 1450
 - replace the pod CIDR to match your environment which is your overlay self-ip __BUT WITH A MASK OF 255.255.255.0__  
   - Your overlay on BIG-IP was created with a __255.255.0.0__ netmask but the podCIDR must have a mask within that subnet range so use __255.255.255.0__  
 
-  vi f5-kctlr-bigip-node.yaml  
+vi f5-kctlr-bigip-node.yaml  
 ```  
 apiVersion: v1  
 kind: Node

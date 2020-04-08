@@ -8,10 +8,12 @@ __TIP:__ Make sure your default route is configured on the correct Kube interfac
   
 
 <br/>  
-  
+
 ![Image](https://github.com/grmarxer/kubernetes/blob/master/Documentation/Flannel_VXLAN/diagrams/FlannelVXLAN_Lab_drawing_040620.png)  
 
 
+<br/>  
+<br/>  
 
 ## Preparing the Ubuntu Server
 

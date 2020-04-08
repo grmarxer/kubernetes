@@ -133,7 +133,7 @@ There are two sections of this file you may want to edit to match your environme
         args:
         - --ip-masq
         - --kube-subnet-mgr
-      __- --iface=ens192__
+       *- --iface=ens192*
 ```
 Flannel will bind by default to the first interface on your kube nodes.  In my environment the first interface is ens160 which is my management interface. I want flannel to bind to my underlay network interface which is ens192 so I added the argument above under containers.
 

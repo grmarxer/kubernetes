@@ -7,7 +7,7 @@
 __TIP:__ Make sure your default route is configured on the correct Kube interface.  
 
 
-[![Image](https://github.com/grmarxer/kubernetes/blob/master/Documentation/Flannel_VXLAN/diagrams/FlannelVXLAN_Lab_drawing_040620.png)]
+![Image](https://github.com/grmarxer/kubernetes/blob/master/Documentation/Flannel_VXLAN/diagrams/FlannelVXLAN_Lab_drawing_040620.png)  
 
 
 

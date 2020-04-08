@@ -95,7 +95,7 @@ EOF
 
 
 
-## Configure BIG-IP to support the underlay network (reference the diagram for this procedure)
+## Configure BIG-IP to support the underlay network  
 Create the underlay network vlan (the vlan name in this environment is vnic5 and bound to interface 1.1)  
 ```tmsh create net vlan vnic5 interfaces add { 1.1 }```
 

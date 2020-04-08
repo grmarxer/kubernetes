@@ -132,6 +132,8 @@ kubeadm join 172.22.10.10:6443 --token olpkaj.96bl7tt60pil4rxx \
 If you lost the join token run this command on the kube master  
 ```kubeadm token create --print-join-command```  
 
+<br/>  
+
 ## To Install the Network POD Flannel into Kube (Performed on the Master ONLY)
 
 Copy this yaml file to your master node.  I recommend opening the link below in your browser and creating a file on your master node using a text editor called kube-flannel.yaml
@@ -170,6 +172,7 @@ Verify flannel is running on your master node
   
 kube-system   kube-flannel-ds-amd64-dhrfl     1/1     Running   0   73s   172.22.10.10   kube8   <none>   <none>
 
+<br/>  
 
 ## Join worker node to the kube master  (Performed on Kube Worker Nodes)
 On each of your worker nodes run the link below specific to your environment that you copied above.
@@ -184,6 +187,8 @@ Run the following commands on the master node to ensure all nodes are up and rea
 ```kubectl get nodes```  
 ```kubectl get pods --all-namespaces -o wide```
 
+<br/>  
+
 ## Preparing BIG-IP to Connect to the KUBE cluster for CIS using Flannel VXLAN (Performed on BIG-IP)  
 1. v16 license or newer is required on your BIG-IP  
 2. Create a partition "kubernetes" with a default RD of zero  
@@ -195,6 +200,8 @@ Run the following commands on the master node to ensure all nodes are up and rea
        https://clouddocs.f5.com/products/extensions/f5-appsvcs-extension/latest/userguide/installation.html  
          
        https://github.com/F5Networks/f5-appsvcs-extension/releases  
+
+<br/> 
 
 ## Setting up BIG-IP Overlay network for Flannel VXLAN (Performed on BIG-IP)  
 Create VXLAN tunnel profile on BIG-IP  
@@ -233,6 +240,8 @@ Interface Name                      flannel_vxlan
 flannel_vxlan: flags=4291<UP,BROADCAST,RUNNING,NOARP,MULTICAST>  mtu 1450
         ether 00:0c:29:0c:7f:32  txqueuelen 1000  (Ethernet)  
 ```  
+
+<br/>  
 
 ## Create a Kubernetes Node for the BIG-IP device (Kube Master Node Only)  
 
@@ -278,6 +287,8 @@ kube8   Ready     master   46m   v1.18.0
 kube9   Ready     <none>   29m   v1.18.0  
 ```
 
+<br/>  
+
 ## Download the F5 CIS image on the Kube Master Node  
 
 This step will require a docker login (create one if you do not have one)  
@@ -285,6 +296,8 @@ This step will require a docker login (create one if you do not have one)
 ```docker login```  
 
 ```docker pull f5networks/k8s-bigip-ctlr```  
+
+<br/>  
 
 ## Create a kube "secret" that will contain the BIG-IP username and password (performed Kube Master Node)  
 
@@ -301,11 +314,15 @@ To view the secret that was created use the following command:
 
 ```kubectl describe secret/bigip-login -n kube-system```
 
+<br/>  
+
 ## Create a service account on the Kube Master Node  
 
 This service account is required by the k8s-bigip-ctlr for the AS3 to issue commands against BIG-IP  
 
 ```kubectl create serviceaccount k8s-bigip-ctlr -n kube-system```  
+
+<br/>  
 
 ## Create a Cluster Role on the Kube Master Node (Required for AS3 permissions)  
 
@@ -319,6 +336,7 @@ ClusterRoleBinding may be used to grant permission at the cluster level and in a
 
 ```kubectl create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr```  
 
+<br/>  
 
 ## Create the F5 CIS POD on the Kube System (Performed on the Kube Master)  
 
@@ -393,6 +411,8 @@ Confirm the CIS POD is up
 
 ```kubectl get pods --all-namespaces -o wide | grep bigip1```  
 
+<br/>  
+
 ## Deploy the F5 Hello POD that will be used as Pool Members sent to the BIG-IP via AS3  (Performed on the Kube Master)  
 
 This will create two http application servers as docker containers inside your kube system.  
@@ -437,6 +457,8 @@ Confirm the POD was created and is up and running
 
 ```kubectl get pods --all-namespaces -o wide | grep hello```  
 
+<br/>  
+
 ## Deploy the F5 AS3 Service POD that will tie together the F5-hello PODs (Performed on the Kube Master)  
 
 Create the following yaml file  
@@ -472,6 +494,8 @@ Deploy the yaml file created above
 Confirm the service POD was created and up and running.  
 
 ```kubectl get service --all-namespaces -o wide | grep hello```  
+
+<br/>  
 
 ## Deploy the F5 AS3 Config Map that will push the AS3 objects created above to BIG-IP (Performed on the Kube Master)  
 
@@ -565,6 +589,8 @@ Annotations:        flannel.alpha.coreos.com/backend-data: {"VtepMAC":"12:df:a1:
                     flannel.alpha.coreos.com/kube-subnet-manager: true
                     flannel.alpha.coreos.com/public-ip: 172.22.10.10
 ```  
+
+<br/>  
 
 ## Delete the F5 AS3 Config Map that was created on the BIG-IP above (Performed on the Kube Master)  
 

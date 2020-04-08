@@ -5,7 +5,7 @@
 - As of v16 of the Virtual Edition licenses you no longer need the SDN services license for VXLAN -- the SDN services license in now included with all v16 licenses and beyond
 
 
-! [Lab Diagram] (https://https://github.com/grmarxer/kubernetes/blob/master/Documentation/Flannel_VXLAN/diagrams/Kube_FlannelVXLAN_CIS_Lab_drawing_040620.png)
+! [Lab Diagram] (https://github.com/grmarxer/kubernetes/blob/master/Documentation/Flannel_VXLAN/diagrams/Kube_FlannelVXLAN_CIS_Lab_drawing_040620.png)
 
 
 ## Preparing the Ubuntu Server

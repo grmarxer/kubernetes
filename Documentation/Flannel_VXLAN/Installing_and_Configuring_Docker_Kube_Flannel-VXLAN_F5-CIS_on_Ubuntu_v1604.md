@@ -4,6 +4,10 @@
 - This document will also set all Flannel VXLAN interfaces to a MTU of 1450
 - As of v16 of the Virtual Edition licenses you no longer need the SDN services license for VXLAN -- the SDN services license in now included with all v16 licenses and beyond
 
+
+! [Lab Diagram] (https://https://github.com/grmarxer/kubernetes/blob/master/Documentation/Flannel_VXLAN/diagrams/Kube_FlannelVXLAN_CIS_Lab_drawing_040620.png)
+
+
 ## Preparing the Ubuntu Server
 
 __Make sure you are running Ubuntu 16.04 on your Kube nodes__  

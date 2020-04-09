@@ -1,7 +1,6 @@
 # Installing and Configuring Docker, Kube, Calico BGP and F5 Container Ingress Services (CIS) using ubuntu 16.04
 
-- This document assumes everything is installed under root  --  sudo su -
-- As of v16 of the Virtual Edition licenses you no longer need the SDN services license for VXLAN -- the SDN services license in now included with all v16 licenses and beyond  
+- This document assumes everything is installed under root  --  sudo su -  
 
 __TIP:__ Make sure your default route is configured on the correct Kube interface.  
   

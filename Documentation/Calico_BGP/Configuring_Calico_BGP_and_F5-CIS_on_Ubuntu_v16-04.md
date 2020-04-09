@@ -8,7 +8,8 @@ __TIP:__ Make sure your default route is configured on the correct Kube interfac
 
 <br/>  
 
-![Image](png)  
+![Image](https://github.com/grmarxer/kubernetes/blob/master/Documentation/Calico_BGP/diagrams/Calico_BGP_lab_%20drawing_040720.png)  
+ 
 
 
 <br/>  

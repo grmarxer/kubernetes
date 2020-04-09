@@ -128,7 +128,7 @@ Install Calico Version 3.10
 
 If you are using pod CIDR 192.168.0.0/16, skip the next step. If you are using a different pod CIDR, use the following commands to set the pod CIDR that matches your environment in the calico.yaml file.  
 
-Changing the Calico default IP block to the block you used during Kube Init  
+Changing the Calico default IP block to the block you used during Kube Init.    
 
 ```POD_CIDR="<172.16.0.0/16>" sed -i -e "s?192.168.0.0/16?$POD_CIDR?g" calico.yaml```  
 

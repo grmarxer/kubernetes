@@ -1,7 +1,6 @@
-# Installing and Configuring Docker, Kube, Flannel VXLAN and F5 Container Ingress Services (CIS) using ubuntu 16.04
+# Installing and Configuring Docker, Kube, Calico BGP and F5 Container Ingress Services (CIS) using ubuntu 16.04
 
 - This document assumes everything is installed under root  --  sudo su -
-- This document will also set all Flannel VXLAN interfaces to a MTU of 1450
 - As of v16 of the Virtual Edition licenses you no longer need the SDN services license for VXLAN -- the SDN services license in now included with all v16 licenses and beyond  
 
 __TIP:__ Make sure your default route is configured on the correct Kube interface.  
@@ -9,7 +8,7 @@ __TIP:__ Make sure your default route is configured on the correct Kube interfac
 
 <br/>  
 
-![Image](https://github.com/grmarxer/kubernetes/blob/master/Documentation/Flannel_VXLAN/diagrams/FlannelVXLAN_Lab_drawing_040620.png)  
+![Image](png)  
 
 
 <br/>  
@@ -91,94 +90,61 @@ EOF
 
 <br/><br/>
 ## *Repeat the steps above for all nodes in your kube cluster* 
-<br/><br/>
-
-
-
-## Configure BIG-IP to support the underlay network  
-Create the underlay network vlan (the vlan name in this environment is vnic5 and bound to interface 1.1)  
-```tmsh create net vlan vnic5 interfaces add { 1.1 }```
-
-Create the underlay network self-ip (in this environment the self-ip is 172.22.10.1/24)  
-```tmsh create net self 172.22.10.1 address 172.22.10.1/24 allow-service all vlan vnic5```
-
-<br/> 
+<br/><br/>  
 
 ## Initialize Kube (Performed on the Kube Master ONLY)
 
 If you are using a IP network other than the default of 192.168.0.0 you must include the cidr range in the init step.
- __( --pod-network-cidr=10.244.0.0/16 )__
-
-__NOTE:__ Flannel uses a default network of 10.244.0.0/16
+ __( --pod-network-cidr=172.16.0.0/16 )__
 
 Also if you are connecting to an interface other than the primary interface on the Kube Master Ubuntu node you must call that out during the INIT.  If you do not, Kube will use the Primary Ubuntu ethernet interface for API traffic
-__( --apiserver-advertise-address=172.22.10.10 )__
+__( --apiserver-advertise-address=172.18.10.10 )__
 
-```kubeadm init --apiserver-advertise-address=172.22.10.10 --pod-network-cidr=10.244.0.0/16```
+```kubeadm init --apiserver-advertise-address=172.18.10.10 --pod-network-cidr=172.16.0.0/16```
 
 To start using your cluster, you need to run the following as a regular user:
 
 ```mkdir -p $HOME/.kube```  
- ```cp -i /etc/kubernetes/admin.conf $HOME/.kube/config```  
+```cp -i /etc/kubernetes/admin.conf $HOME/.kube/config```  
 ```chown $(id -u):$(id -g) $HOME/.kube/config``` 
 
 
 Copy the following link, specific to your installation, to be used later to join the worker Kube nodes to the master node.
 Example from my specific environment -- output of kubeadm init:
 ```
-kubeadm join 172.22.10.10:6443 --token olpkaj.96bl7tt60pil4rxx \
-    --discovery-token-ca-cert-hash sha256:ffa74d2b1d37229604672244a8f00d926dc7b0a2a6789d5417ebe08cf759df87
+kubeadm join 172.18.10.10:6443 --token yiqzpj.0q898oj9wuiy0hja \
+    --discovery-token-ca-cert-hash sha256:dc84cfc0d02d736e0358e9ecd2ec21879f81905cb892fb9ad91dd3a54d01e921
 ```
 If you lost the join token run this command on the kube master  
 ```kubeadm token create --print-join-command```  
 
 <br/>  
 
-## To Install the Network POD Flannel into Kube (Performed on the Master ONLY)
+## Install the Network POD Calico into Kube (Performed on the Kube Master ONLY)  
 
-Copy this yaml file to your master node.  I recommend opening the link below in your browser and creating a file on your master node using a text editor called kube-flannel.yaml
+Installing with the Kubernetes API datastore—50 nodes or less.  
+Install Calico Version 3.10  
+```curl https://docs.projectcalico.org/v3.10/manifests/calico.yaml -O```  
 
-https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
+If you are using pod CIDR 192.168.0.0/16, skip the next step. If you are using a different pod CIDR, use the following commands to set the pod CIDR that matches your environment in the calico.yaml file.  
 
-There are two sections of this file you may want to edit to match your environment.  For this specific environment I have the following:
-```
-      containers:
-     - name: kube-flannel
-        image: quay.io/coreos/flannel:v0.12.0-amd64
-        command:
-        - /opt/bin/flanneld
-        args:
-        - --ip-masq
-        - --kube-subnet-mgr
-        - --iface=ens192
-```
-Flannel will bind by default to the first interface on your kube nodes.  In my environment the first interface is ens160 which is my management interface. I want flannel to bind to my underlay network interface which is __ens192__ so I added the __iface__ argument above under containers.
+Changing the Calico default IP block to the block you used during Kube Init  
 
-By default flannel uses the 10.244.0.0/16 network.  I did not modify this in my environment.  If you want flannel to use a network other than the default of 10.244.0.0/16 you modify it here:
-```
-  net-conf.json: |
-    {
-      "Network": "10.244.0.0/16",
-      "Backend": {
-        "Type": "vxlan"
-      }
-    }
-```
-Command to create flannel deployment  
-```kubectl create -f kube-flannel.yaml```  
+```POD_CIDR="<172.16.0.0/16>" sed -i -e "s?192.168.0.0/16?$POD_CIDR?g" calico.yaml```  
 
-Verify flannel is running on your master node  
-```kubectl get pods --all-namespaces -o wide | grep flannel```  
-  
-kube-system   kube-flannel-ds-amd64-dhrfl     1/1     Running   0   73s   172.22.10.10   kube8   <none>   <none>
+Apply the Calico.yaml file  
+
+```kubectl apply -f calico.yaml```  
+
+__Note:__ Most likely the IP CIDR block command above will not work correctly and you will need to use calicoctl to enter the correct CIDR Block.  Well will confirm the CIDR block is correct in future steps.  
 
 <br/>  
 
 ## Join worker node to the kube master  (Performed on Kube Worker Nodes)
 On each of your worker nodes run the link below specific to your environment that you copied above.
 ```
-kubeadm join 172.22.10.10:6443 --token olpkaj.96bl7tt60pil4rxx \
-    --discovery-token-ca-cert-hash sha256:ffa74d2b1d37229604672244a8f00d926dc7b0a2a6789d5417ebe08cf759df87
+kubeadm join 172.18.10.10:6443 --token yiqzpj.0q898oj9wuiy0hja \
+    --discovery-token-ca-cert-hash sha256:dc84cfc0d02d736e0358e9ecd2ec21879f81905cb892fb9ad91dd3a54d01e921
 ```
 If you lost the join token run this command on the master  
 ```kubeadm token create --print-join-command```
@@ -189,102 +155,200 @@ Run the following commands on the master node to ensure all nodes are up and rea
 
 <br/>  
 
-## Preparing BIG-IP to Connect to the KUBE cluster for CIS using Flannel VXLAN (Performed on BIG-IP)  
+##  Install Calicoctl, the Command line tool for Calico (Performed on the Kube Master ONLY)  
+
+Installing calicoctl as a binary on a single host  
+
+```cd /usr/local/bin/```
+
+```curl -O -L  https://github.com/projectcalico/calicoctl/releases/download/v3.10.1/calicoctl```
+
+  
+ ```chmod +x calicoctl```  
+
+Configure calicoctl to connect to your datastore.  
+
+__Note:__ Make sure you change the __kubeconfig__ path to match your environment.  Since my environment was installed under root my kubeconfig path would be "/root/.kube/config"  
+
+Create the calico directory inside /etc/ and the calicoctl.cfg file.  
+
+```mkdir /etc/calico```  
+
+```vi /etc/calico/calicoctl.cfg```  
+
+```
+apiVersion: projectcalico.org/v3
+kind: CalicoAPIConfig
+metadata:
+spec:
+  datastoreType: "kubernetes"
+  kubeconfig: "$HOME/.kube/config"  
+```  
+
+Confirm calicoctl installation  
+
+```calicoctl version```  
+
+```
+Client Version:    v3.10.1
+Git commit:        4aaff8e9
+Cluster Version:   v3.10.0
+Cluster Type:      k8s,bgp,kdd
+```  
+
+Commands to change calico IP range if not set properly above.  
+
+```calicoctl get ipPool -o wide``` 
+
+If the CIDR range provided with the above command is not correct follow the following steps.  
+
+```calicoctl delete ippool default-ipv4-ippool```  
+
+Make sure the CIDR range you enter below matches your environment.  
+
+```
+calicoctl create -f - << EOF
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: default-ipv4-ippool
+spec:
+  cidr: 172.16.0.0/16
+  ipipMode: CrossSubnet
+  natOutgoing: true
+  disabled: false
+  nodeSelector: all()
+EOF
+```
+
+Verify the CIDR range is now correct.
+
+```calicoctl get ipPool -o wide```  
+
+Reboot your master and worker kube nodes and make sure everything under comes up with the correct IP's.  
+
+```kubectl get pods --all-namespaces -o wide```  
+
+<br/>  
+
+## Preparing BIG-IP to Connect to the KUBE cluster for CIS using Calico BGP (Performed on BIG-IP)  
+
 1. v16 license or newer is required on your BIG-IP  
 2. Create a partition "kubernetes" with a default RD of zero  
-3. If you are using a BIG-IP version prior to 14.0, before you can use the Configuration utility, you must enable the framework using the BIG-IP command line.   
+3. Enable BGP on Route Domain 0
+4. If you are using a BIG-IP version prior to 14.0, before you can use the Configuration utility, you must enable the framework using the BIG-IP command line.   
   
         From the CLI, type the following command: touch /var/config/rest/iapps/enable.  
-4. Download and install the latest AS3 RPM file on BIG-IP  ( f5-appsvcs-3.18.0-4.noarch.rpm )  When writing this document v3.18 was the latest.  
+5. Download and install the latest AS3 RPM file on BIG-IP  ( f5-appsvcs-3.18.0-4.noarch.rpm )  When writing this document v3.18 was the latest.  
   
        https://clouddocs.f5.com/products/extensions/f5-appsvcs-extension/latest/userguide/installation.html  
          
        https://github.com/F5Networks/f5-appsvcs-extension/releases  
+6. Be sure to have port-lockdown set to allow all on the Self IP for which BIG-IP will advertise BGP  
 
 <br/> 
 
-## Setting up BIG-IP Overlay network for Flannel VXLAN (Performed on BIG-IP)  
-Create VXLAN tunnel profile on BIG-IP  
+##  Setting up BGP on BIG-IP  
 
-__Note:__ We use port 8472 as most linux systems default port for VXLAN is 8472  
+From Bash  
 
-```tmsh create net tunnels vxlan fl-vxlan port 8472 flooding-type none```  
+```imish```  
 
-Create the VXLAN tunnel on BIG-IP using the tunnel name of __flannel_vxlan__ and the local address of your BIG-IP underlay network. 
+Once inside the imish shell.  
 
-__Note:__ The name __flannel_vxlan__ has significance and will be an argument in your CIS deployment.  They must match if you decide to alter the name from what I have here.  
-I also used a MTU of 1450 which is the default for most Flannel systems Flannel.  You can use PMTU but I wanted to hard cord my MTU in my environment.  
-```tmsh create net tunnels tunnel flannel_vxlan key 1 profile fl-vxlan local-address 172.22.10.1 mtu 1450```
+```enable```  
 
+```config terminal```  
 
-Create the BIG-IP Overlay VXLAN tunnel self-ip.  
+Change the neighbor statements below to peer with each of your Kube Master and Worker Nodes IP's.  
 
-__Note:___  The subnet mask here must match that of your flannel network -- in this  environment it is 255.255.0.0  
-
-```tmsh create net self 10.244.254.1 address 10.244.254.1/16 allow-service none vlan flannel_vxlan```
-
-
-Find the VTEP MAC address for the self-ip you just created.  You can either use the tmsh command below or ifconfig flannel_vxlan to find the MAC address.  
-
-__Note:__ You will need this MAC address later when you create your BIG-IP Kube node on your Kube Master.  
-
-```tmsh show net tunnels tunnel flannel_vxlan all-properties```
 ```
--------------------------------------------------
-Net::Tunnel: flannel_vxlan
--------------------------------------------------
-MAC Address                     00:0c:29:0c:7f:32
-Interface Name                      flannel_vxlan
-```
-```[root@flannel-bigip-15-1-0-2:Active:Standalone] config # ifconfig flannel_vxlan
-flannel_vxlan: flags=4291<UP,BROADCAST,RUNNING,NOARP,MULTICAST>  mtu 1450
-        ether 00:0c:29:0c:7f:32  txqueuelen 1000  (Ethernet)  
+router bgp 64512
+neighbor calico-k8s peer-group
+neighbor calico-k8s remote-as 64512
+neighbor 172.18.10.10 peer-group calico-k8s
+neighbor 172.18.10.11 peer-group calico-k8s
+write 
+end  
 ```  
+
+```show ip bgp summary```  
+
+```
+VE5-13-1-kube.com[0]#show ip bgp summary
+BGP router identifier 172.18.10.1, local AS number 64512
+BGP table version is 1
+0 BGP AS-PATH entries
+0 BGP community entries
+
+Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+172.18.10.10    4 64512       0       0        0    0    0          Active
+172.18.10.11    4 64512       0       0        0    0    0          Active
+
+Total number of neighbors 2  
+```  
+<br/>   
+
+## Setting up BGP on Calico (Kube Master Node Only)  
+
+```
+cat << EOF | calicoctl create -f -
+ apiVersion: projectcalico.org/v3
+ kind: BGPConfiguration
+ metadata:
+   name: default
+   creationTimestamp: null
+ spec:
+   logSeverityScreen: Info
+   nodeToNodeMeshEnabled: true
+   asNumber: 64512
+EOF
+```  
+
+Be sure to change the PeerIP below to match that of the BIG-IP self IP.  
+
+```
+cat << EOF | calicoctl create -f -
+ apiVersion: projectcalico.org/v3
+ kind: BGPPeer
+ metadata:
+   name: bigip1
+ spec:
+   peerIP: 172.18.10.1
+   asNumber: 64512
+EOF
+```
 
 <br/>  
 
-## Create a Kubernetes Node for the BIG-IP device (Kube Master Node Only)  
+## Confirm BGP is working properly (Performed on BIG-IP)  
 
-- You need to create a BIG-IP node on your Kube Master for the Kube cluster to know about BIG-IP  
+From Bash  
 
-- create the following file below on your Kube master  
+```imish```  
 
-- Replace the __VTEP address__ with that of the one specific to your environment  
+Once inside the imish shell.  
 
-- replace the __public IP__ to match that of your underlay self-ip in your environment  
+```enable```  
 
-- replace the pod CIDR to match your environment which is your overlay self-ip __BUT WITH A MASK OF 255.255.255.0__  
-  - Your overlay on BIG-IP was created with a __255.255.0.0__ netmask but the podCIDR must have a mask within that subnet range so use __255.255.255.0__  
+```show ip route```  
 
-vi f5-kctlr-bigip-node.yaml  
-```  
-apiVersion: v1  
-kind: Node
-metadata:
-  name: bigip
-  annotations:
-    # Provide the MAC address of the BIG-IP VXLAN tunnel
-    flannel.alpha.coreos.com/backend-data: '{"VtepMAC":"00:0c:29:0c:7f:32"}'
-    flannel.alpha.coreos.com/backend-type: "vxlan"
-    flannel.alpha.coreos.com/kube-subnet-manager: "true"
-    # Provide the IP address you assigned as the BIG-IP VTEP
-    flannel.alpha.coreos.com/public-ip: 172.22.10.1
-spec:
-  #3# Define the flannel subnet you want to assign to the BIG-IP device.
-  # Be sure this subnet does not collide with any other Nodes' subnets.
-  podCIDR: 10.244.254.0/24  
+You should see the BGP routes for the CIDR block you configured in Calico as BGP routes in the routing table.  
+
 ```
+VE5-13-1-kube.com[0]#show ip route
+Codes: K - kernel, C - connected, S - static, R - RIP, B - BGP
+       O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default
 
-```kubectl create -f f5-kctlr-bigip-node.yaml```  
-
-Verify the node was create correctly.  
-__Note:__ The status and version will not be populated.  
-```
-root@kube8:~# kubectl get nodes
-NAME    STATUS    ROLES    AGE   VERSION
-bigip   Unknown   <none>   7s
-kube8   Ready     master   46m   v1.18.0
-kube9   Ready     <none>   29m   v1.18.0  
+C       127.0.0.1/32 is directly connected, lo
+C       127.1.1.254/32 is directly connected, tmm
+B       172.16.85.192/26 [200/0] via 172.18.10.11, /Kubernetes/vnic3, 00:41:02
+B       172.16.190.64/26 [200/0] via 172.18.10.10, /Kubernetes/vnic3, 00:40:57
+C       172.18.10.0/24 is directly connected, /Kubernetes/vnic3
 ```
 
 <br/>  
@@ -342,9 +406,7 @@ ClusterRoleBinding may be used to grant permission at the cluster level and in a
 
 Create the following yaml file.  
 
-Be sure to modify the __bigip-url__ below to match that of your BIG-IP Underlay Self IP.  
-
-Also be sure that the arg __flannel-name__ matches the VXLAN tunnel created in BIG-IP, and that you define __cluster__ rather than nodeport for pool-member-type.  
+Be sure to modify the __bigip-url__ below to match that of your BIG-IP Self-IP.  
 
 vi setup_cis_bigip1.yaml  
 
@@ -395,9 +457,8 @@ spec:
             # https://clouddocs.f5.com/products/connectors/k8s-bigip-ctlr/latest
             "--bigip-username=$(BIGIP_USERNAME)",
             "--bigip-password=$(BIGIP_PASSWORD)",
-            "--bigip-url=172.22.10.1",
+            "--bigip-url=172.18.10.1",
             "--bigip-partition=kubernetes",
-            "--flannel-name=flannel_vxlan",
             "--insecure=true",
             "--pool-member-type=cluster"
             ]
@@ -559,37 +620,6 @@ Deploy the yaml file created above.
 
 If all is working properly you should have a new partition on BIG-IP called "AS3", a virtual server created with a pool attached that has members on port 8080 which are green.  
 
-__Note:__ CIS will also create the fdb entries for your kube nodes on BIG-IP.  
-
-```
-tmsh show net fdb tunnel flannel_vxlan
-------------------------------------------------------------------
-Net::FDB
-Tunnel         Mac Address        Member                   Dynamic
-------------------------------------------------------------------
-flannel_vxlan  12:df:a1:5c:5f:fb  endpoint:172.22.10.10%0  no
-flannel_vxlan  3a:33:13:2d:01:e6  endpoint:172.22.10.11%0 
-```  
-
-The MAC addresses above are the VTEP tunnel endpoints for each of your kube nodes.  You can verify this by looking at the mac address (ifconfig flannel.1) 
-on each of your kube nodes or by running kubectl describe node/nodename - on the kube master.  
-
-```
-root@kube8:~# kubectl describe node/kube8
-Name:               kube8
-Roles:              master
-Labels:             beta.kubernetes.io/arch=amd64
-                    beta.kubernetes.io/os=linux
-                    kubernetes.io/arch=amd64
-                    kubernetes.io/hostname=kube8
-                    kubernetes.io/os=linux
-                    node-role.kubernetes.io/master=
-Annotations:        flannel.alpha.coreos.com/backend-data: {"VtepMAC":"12:df:a1:5c:5f:fb"}
-                    flannel.alpha.coreos.com/backend-type: vxlan
-                    flannel.alpha.coreos.com/kube-subnet-manager: true
-                    flannel.alpha.coreos.com/public-ip: 172.22.10.10
-```  
-
 <br/>  
 
 ## Delete the F5 AS3 Config Map that was created on the BIG-IP above (Performed on the Kube Master)  
@@ -637,4 +667,9 @@ Delete the configmap from your Kubernetes configuration.
 ```kubectl delete configmap f5-as3-declaration```  
 
 If all worked properly the AS3 partition and all configuration objects will have been deleted from BIG-IP.  
+
+
+
+
+
 

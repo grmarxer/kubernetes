@@ -571,8 +571,7 @@ flannel_vxlan  12:df:a1:5c:5f:fb  endpoint:172.22.10.10%0  no
 flannel_vxlan  3a:33:13:2d:01:e6  endpoint:172.22.10.11%0 
 ```  
 
-The MAC addresses above are the VTEP tunnel endpoints for each of your kube nodes.  You can verify this by looking at the mac address (ifconfig flannel.1) 
-on each of your kube nodes or by running kubectl describe node/nodename - on the kube master.  
+The MAC addresses above are the VTEP tunnel endpoints for each of your kube nodes, which is the flannel.1 interface on each kube node (overlay network).  The member IP address is that of your underlay network.  You can verify this by looking at the mac address (ifconfig flannel.1) on each of your kube nodes or by running kubectl describe node/nodename - on the kube master.  
 
 ```
 root@kube8:~# kubectl describe node/kube8

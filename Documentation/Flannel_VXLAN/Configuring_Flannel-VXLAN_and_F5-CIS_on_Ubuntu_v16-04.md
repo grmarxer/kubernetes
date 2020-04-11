@@ -411,6 +411,36 @@ Confirm the CIS POD is up
 
 ```kubectl get pods --all-namespaces -o wide | grep bigip1```  
 
+__Note:__ With this deployment CIS will manually create the fdb entries for your kube nodes on the BIG-IP.  
+
+```
+tmsh show net fdb tunnel flannel_vxlan
+------------------------------------------------------------------
+Net::FDB
+Tunnel         Mac Address        Member                   Dynamic
+------------------------------------------------------------------
+flannel_vxlan  12:df:a1:5c:5f:fb  endpoint:172.22.10.10%0  no
+flannel_vxlan  3a:33:13:2d:01:e6  endpoint:172.22.10.11%0 
+```  
+
+The MAC addresses above are the VTEP tunnel endpoints for each of your kube nodes, which is the flannel.1 interface on each kube node (overlay network).  The member IP address is that of your underlay network, interface __ens192__ in this environment.  You can verify this by looking at the mac address (ifconfig flannel.1) on each of your kube nodes or by running kubectl describe node/nodename - on the kube master.  
+
+```
+root@kube8:~# kubectl describe node/kube8
+Name:               kube8
+Roles:              master
+Labels:             beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/os=linux
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=kube8
+                    kubernetes.io/os=linux
+                    node-role.kubernetes.io/master=
+Annotations:        flannel.alpha.coreos.com/backend-data: {"VtepMAC":"12:df:a1:5c:5f:fb"}
+                    flannel.alpha.coreos.com/backend-type: vxlan
+                    flannel.alpha.coreos.com/kube-subnet-manager: true
+                    flannel.alpha.coreos.com/public-ip: 172.22.10.10
+```  
+
 <br/>  
 
 ## Deploy the F5 Hello POD that will be used as Pool Members sent to the BIG-IP via AS3  (Performed on the Kube Master)  
@@ -559,35 +589,6 @@ Deploy the yaml file created above.
 
 If all is working properly you should have a new partition on BIG-IP called "AS3", a virtual server created with a pool attached that has members on port 8080 which are green.  
 
-__Note:__ CIS will also create the fdb entries for your kube nodes on BIG-IP.  
-
-```
-tmsh show net fdb tunnel flannel_vxlan
-------------------------------------------------------------------
-Net::FDB
-Tunnel         Mac Address        Member                   Dynamic
-------------------------------------------------------------------
-flannel_vxlan  12:df:a1:5c:5f:fb  endpoint:172.22.10.10%0  no
-flannel_vxlan  3a:33:13:2d:01:e6  endpoint:172.22.10.11%0 
-```  
-
-The MAC addresses above are the VTEP tunnel endpoints for each of your kube nodes, which is the flannel.1 interface on each kube node (overlay network).  The member IP address is that of your underlay network.  You can verify this by looking at the mac address (ifconfig flannel.1) on each of your kube nodes or by running kubectl describe node/nodename - on the kube master.  
-
-```
-root@kube8:~# kubectl describe node/kube8
-Name:               kube8
-Roles:              master
-Labels:             beta.kubernetes.io/arch=amd64
-                    beta.kubernetes.io/os=linux
-                    kubernetes.io/arch=amd64
-                    kubernetes.io/hostname=kube8
-                    kubernetes.io/os=linux
-                    node-role.kubernetes.io/master=
-Annotations:        flannel.alpha.coreos.com/backend-data: {"VtepMAC":"12:df:a1:5c:5f:fb"}
-                    flannel.alpha.coreos.com/backend-type: vxlan
-                    flannel.alpha.coreos.com/kube-subnet-manager: true
-                    flannel.alpha.coreos.com/public-ip: 172.22.10.10
-```  
 
 <br/>  
 

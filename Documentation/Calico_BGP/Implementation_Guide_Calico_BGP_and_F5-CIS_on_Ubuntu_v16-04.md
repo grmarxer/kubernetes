@@ -233,7 +233,10 @@ Reboot your master and worker kube nodes and make sure everything under comes up
 
 ## Preparing BIG-IP to Connect to the KUBE cluster for CIS using Calico BGP (Performed on BIG-IP)  
 
-1. v16 license or newer is required on your BIG-IP  
+1. v16 license or newer and the "Advanced Routing Module" is required on your BIG-IP  
+
+    __Note:__ The "Advanced Routing Module" is included with the "Better and Best" licenses.  
+    
 2. Create a partition "kubernetes" with a default RD of zero  
 3. Enable BGP on Route Domain 0
 4. If you are using a BIG-IP version prior to 14.0, before you can use the Configuration utility, you must enable the framework using the BIG-IP command line.   

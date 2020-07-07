@@ -190,7 +190,10 @@ Run the following commands on the master node to ensure all nodes are up and rea
 <br/>  
 
 ## Preparing BIG-IP to Connect to the KUBE cluster for CIS using Flannel VXLAN (Performed on BIG-IP)  
-1. v16 license or newer is required on your BIG-IP  
+1. v16 license or newer and the "Advanced Routing Module" is required on your BIG-IP  
+
+    __Note:__ The "Advanced Routing Module" is included with the "Better and Best" licenses.  
+
 2. Create a partition "kubernetes" with a default RD of zero  
 3. If you are using a BIG-IP version prior to 14.0, before you can use the Configuration utility, you must enable the framework using the BIG-IP command line.   
   

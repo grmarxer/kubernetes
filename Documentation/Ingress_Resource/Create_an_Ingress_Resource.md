@@ -9,6 +9,7 @@ Sources [What is Kubernetes Ingress?](https://www.ibm.com/cloud/blog/kubernetes-
 <br/>  
 
 Kubernetes Ingress is an API object that provides routing rules to manage external users' access to the services in a Kubernetes cluster. 
+<br/>  
 
 #### Options for exposing applications deployed in Kubernetes  
 
@@ -21,6 +22,7 @@ Similar to pods and deployments, services are resources in Kubernetes. A service
 For internal application access within a Kubernetes cluster, ClusterIP is the preferred method. It is a default setting in Kubernetes and uses an internal IP address to access the service.
 
 To expose a service to external network requests, NodePort, LoadBalancer, and Ingress are possible options. Ingress is the focus of this procedure.  
+<br/>  
 
 #### What is Kubernetes Ingress and why is it useful?  
 

@@ -11,6 +11,7 @@ Sources [What is Kubernetes Ingress?](https://www.ibm.com/cloud/blog/kubernetes-
 Kubernetes Ingress is an API object that provides routing rules to manage external users' access to the services in a Kubernetes cluster. 
 <br/>  
 
+
 #### Options for exposing applications deployed in Kubernetes  
 
 There are several ways to expose your application to the outside of your Kubernetes cluster, and you'll want to select the appropriate one based on your specific use case. 

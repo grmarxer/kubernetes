@@ -6,9 +6,11 @@
 
 Sources [What is Kubernetes Ingress?](https://www.ibm.com/cloud/blog/kubernetes-ingress#:~:text=is%20it%20useful%3F-,Kubernetes%20Ingress%20is%20an%20API%20object%20that%20provides%20routing%20rules,each%20service%20on%20the%20node.) and [Kubernetes Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)  
 
+<br/>  
+
 Kubernetes Ingress is an API object that provides routing rules to manage external users' access to the services in a Kubernetes cluster. 
 
-### Options for exposing applications deployed in Kubernetes  
+#### Options for exposing applications deployed in Kubernetes  
 
 There are several ways to expose your application to the outside of your Kubernetes cluster, and you'll want to select the appropriate one based on your specific use case. 
 
@@ -20,7 +22,7 @@ For internal application access within a Kubernetes cluster, ClusterIP is the pr
 
 To expose a service to external network requests, NodePort, LoadBalancer, and Ingress are possible options. Ingress is the focus of this procedure.  
 
-### What is Kubernetes Ingress and why is it useful?  
+#### What is Kubernetes Ingress and why is it useful?  
 
 Kubernetes Ingress is an API object that provides routing rules to manage external users' access to the services in a Kubernetes cluster, typically via HTTPS/HTTP. With Ingress, you can easily set up rules for routing traffic without creating a bunch of Load Balancers or exposing each service on the node. This makes it the best option to use in production environments.   
 

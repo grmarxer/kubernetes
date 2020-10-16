@@ -16,7 +16,7 @@ Kubernetes Ingress is an API object that provides routing rules to manage extern
 
 There are several ways to expose your application to the outside of your Kubernetes cluster, and you'll want to select the appropriate one based on your specific use case. 
 
-There four main options for exposing an application: ClusterIP, NodePort, LoadBalancer, and Ingress. Each provides a way to expose services and is useful in different situations. A service is essentially a frontend for your application that automatically reroutes traffic to available pods in an evenly distributed way. Services are an abstract way of exposing an application running on a set of pods as a network service. Pods are immutable, which means that when they die, they are not resurrected. The Kubernetes cluster creates new pods in the same node or in a new node once a pod dies. 
+There are four main options for exposing an application: ClusterIP, NodePort, LoadBalancer, and Ingress. Each provides a way to expose services and is useful in different situations. A service is essentially a frontend for your application that automatically reroutes traffic to available pods in an evenly distributed way. Services are an abstract way of exposing an application running on a set of pods as a network service. Pods are immutable, which means that when they die, they are not resurrected. The Kubernetes cluster creates new pods in the same node or in a new node once a pod dies. 
 
 Similar to pods and deployments, services are resources in Kubernetes. A service provides a single point of access from outside the Kubernetes cluster and allows you to dynamically access a group of replica pods. 
 

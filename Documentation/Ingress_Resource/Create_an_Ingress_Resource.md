@@ -4,9 +4,7 @@
 
 ## Kubernetes Ingress Overview   
 
-[Source - What is Kubernetes Ingress?](https://www.ibm.com/cloud/blog/kubernetes-ingress#:~:text=is%20it%20useful%3F-,Kubernetes%20Ingress%20is%20an%20API%20object%20that%20provides%20routing%20rules,each%20service%20on%20the%20node.)  
-
-[Source - Kubernetes Ingress?](https://kubernetes.io/docs/concepts/services-networking/ingress/)  
+Sources [What is Kubernetes Ingress?](https://www.ibm.com/cloud/blog/kubernetes-ingress#:~:text=is%20it%20useful%3F-,Kubernetes%20Ingress%20is%20an%20API%20object%20that%20provides%20routing%20rules,each%20service%20on%20the%20node.) and [Kubernetes Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)  
 
 Kubernetes Ingress is an API object that provides routing rules to manage external users' access to the services in a Kubernetes cluster. 
 

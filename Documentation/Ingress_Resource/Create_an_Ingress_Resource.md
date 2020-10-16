@@ -4,7 +4,7 @@
 
 ## Kubernetes Ingress Overview   
 
-Sources [What is Kubernetes Ingress?](https://www.ibm.com/cloud/blog/kubernetes-ingress#:~:text=is%20it%20useful%3F-,Kubernetes%20Ingress%20is%20an%20API%20object%20that%20provides%20routing%20rules,each%20service%20on%20the%20node.) and [Kubernetes Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)  
+Sources: [What is Kubernetes Ingress?](https://www.ibm.com/cloud/blog/kubernetes-ingress#:~:text=is%20it%20useful%3F-,Kubernetes%20Ingress%20is%20an%20API%20object%20that%20provides%20routing%20rules,each%20service%20on%20the%20node.) and [Kubernetes Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)  
 
 <br/>  
 
@@ -38,6 +38,7 @@ An Ingress provides the following:
 - Externally reachable URLs for applications deployed in Kubernetes clusters  
 - Name-based virtual host and URI-based routing support  
 - Load balancing rules and traffic, as well as SSL termination   
+<br/>  
 
 #### What is the Ingress Controller?  
 
@@ -62,7 +63,8 @@ Looking deeper, the Ingress Controller is an application that runs in a Kubernet
 
 
 
-
+<br/>  
+<br/>  
 
 
 ```yaml

@@ -39,7 +39,7 @@ An Ingress provides the following:
 - Name-based virtual host and URI-based routing support  
 - Load balancing rules and traffic, as well as SSL termination   
 
-### What is the Ingress Controller?  
+#### What is the Ingress Controller?  
 
 If Kubernetes Ingress is the API object that provides routing rules to manage external access to services, Ingress Controller is the actual implementation of the Ingress API. The Ingress Controller is usually a load balancer for routing external traffic to your Kubernetes cluster and is responsible for L4-L7 Network Services.  
 
@@ -58,7 +58,12 @@ spec:
 
 As an analogy, if Kubernetes Ingress is a computer, then Ingress Controller is a programmer using the computer and taking action. Furthermore, Ingress Rules act as the manager who directs the programmer to do the work using the computer. Ingress Rules are a set of rules for processing inbound HTTP traffic. An Ingress with no rules sends all traffic to a single default backend service. 
 
-Looking deeper, the Ingress Controller is an application that runs in a Kubernetes cluster and configures an HTTP load balancer according to Ingress Resources. The load balancer can be a software load balancer running in the cluster or a hardware or cloud load balancer running externally. Different load balancers require different Ingress Controller implementations.
+Looking deeper, the Ingress Controller is an application that runs in a Kubernetes cluster and configures an HTTP load balancer according to Ingress Resources. The load balancer can be a software load balancer running in the cluster or a hardware or cloud load balancer running externally. Different load balancers require different Ingress Controller implementations.  
+
+
+
+
+
 
 ```yaml
 apiVersion: apps/v1

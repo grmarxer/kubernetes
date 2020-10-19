@@ -200,62 +200,62 @@ In the following steps we will create a simple deployment using two google image
     vi 3-web-ingress.yaml
     ```  
 
-```yaml
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: ingress-f5
-  namespace: default
-  annotations:
-    virtual-server.f5.com/partition: "kubernetes"
-#
-    virtual-server.f5.com/ip: 172.16.10.100
-#    virtual-server.f5.com/ip: "controller-default"
-#
-    virtual-server.f5.com/http-port: "80"
-    virtual-server.f5.com/balance: "round-robin"
-    virtual-server.f5.com/health: |
-      [
-        {
-          "path": "websvc.example.com/",
-          "send": "GET / HTTP/1.1\r\nHost: \r\nConnection: Close:\r\n\r\n",
-          "recv": "200",
-          "interval": 5,
-          "timeout":  10,
-          "type": "http"
-        },
-        {
-          "path": "web1svc.example.com/v2",
-          "send": "GET /v2 HTTP/1.1\r\nHost: \r\nConnection: Close:\r\n\r\n",
-          "recv": "200",
-          "interval": 5,
-          "timeout":  10,
-          "type": "http"
-        }
-      ]
+    ```yaml
+    apiVersion: extensions/v1beta1
+    kind: Ingress
+    metadata:
+      name: ingress-f5
+      namespace: default
+      annotations:
+        virtual-server.f5.com/partition: "kubernetes"
+    #
+        virtual-server.f5.com/ip: 172.16.10.100
+    #    virtual-server.f5.com/ip: "controller-default"
+    #
+        virtual-server.f5.com/http-port: "80"
+        virtual-server.f5.com/balance: "round-robin"
+        virtual-server.f5.com/health: |
+          [
+            {
+              "path": "websvc.example.com/",
+              "send": "GET / HTTP/1.1\r\nHost: \r\nConnection: Close:\r\n\r\n",
+              "recv": "200",
+              "interval": 5,
+              "timeout":  10,
+              "type": "http"
+            },
+            {
+              "path": "web1svc.example.com/v2",
+              "send": "GET /v2 HTTP/1.1\r\nHost: \r\nConnection: Close:\r\n\r\n",
+              "recv": "200",
+              "interval": 5,
+              "timeout":  10,
+              "type": "http"
+            }
+          ]
 
-spec:
-  rules:
-  - host: websvc.example.com
-    http:
-      paths:
-      - path: /
-        backend:
-            serviceName: web
-            servicePort: 8080
-  - host: web1svc.example.com
-    http:
-      paths:
-      - path: /v2
-        backend:
-            serviceName: web1
-            servicePort: 8080
-```  
+    spec:
+      rules:
+      - host: websvc.example.com
+        http:
+          paths:
+          - path: /
+            backend:
+                serviceName: web
+                servicePort: 8080
+      - host: web1svc.example.com
+        http:
+          paths:
+          - path: /v2
+            backend:
+                serviceName: web1
+                servicePort: 8080
+    ```  
 
 
-```
-kubectl create -f 3-web-ingress.yaml
-```  
+    ```
+    kubectl create -f 3-web-ingress.yaml
+    ```  
 <br/>  
 
 4.  To delete an Ingress Resource all you have to do is delete the Ingress Resource created above   

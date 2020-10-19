@@ -200,7 +200,7 @@ In the following steps we will create a simple deployment using two google image
     ```  
 <br/>   
 
-3.  Create an Ingress resource for the 2-web-service.yaml created above.  In order to create an Ingress resource using CIS and BIG-IP you need to define the necessary BIG-IP annotations in the Ingress resource.  
+3.  Create an Ingress resource definition for the 2-web-service.yaml created above.  In order to create an Ingress resource using CIS and BIG-IP you need to define the necessary BIG-IP annotations in the Ingress resource definition.  
 
     - A complete list of the `BIG-IP Ingress Resource annotations` can be found [here](https://clouddocs.f5.com/containers/latest/userguide/ingress.html#ingress-resources)  
 

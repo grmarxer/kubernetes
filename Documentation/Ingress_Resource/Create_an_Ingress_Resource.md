@@ -76,6 +76,8 @@ In the following steps we will create a simple deployment using two google image
 <br/>  
 
 1.  In this step we will create two deployments in a single yaml file, web and web1.  Web will use the google image `gcr.io/google-samples/hello-app:1.0` and will produce a "version 1" web page when the path "/" is curled.  Web1 will use the google image `gcr.io/google-samples/hello-app:2.0` and will produce a "version 2" web page when the path "/v2" is curled.  
+
+    [Link to 1-web-deployment.yaml file ](https://github.com/grmarxer/kubernetes/blob/master/Documentation/Ingress_Resource/yaml-files/1-web-deployment.yaml)  
     <br/>  
 
     ```
@@ -145,6 +147,8 @@ In the following steps we will create a simple deployment using two google image
 
 2. Create a service for the vi 1-web-deployment.yaml deployment.  We will use `ClusterIP` but `NodePort` may also be used.  
 
+    [Link to 2-web-service.yaml file ](https://github.com/grmarxer/kubernetes/blob/master/Documentation/Ingress_Resource/yaml-files/2-web-service.yaml)  
+
     <br/>  
 
     ```
@@ -194,6 +198,8 @@ In the following steps we will create a simple deployment using two google image
 <br/>   
 
 3.  Create an Ingress resource for the 2-web-service.yaml created above  
+
+    [Link to 3-web-ingress.yaml file ](https://github.com/grmarxer/kubernetes/blob/master/Documentation/Ingress_Resource/yaml-files/3-web-ingress.yaml)  
     <br/>  
 
     ```

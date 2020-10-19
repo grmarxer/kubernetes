@@ -203,7 +203,7 @@ In the following steps we will create a simple deployment using two google image
 
     - F5 CIS Ingress services documentation can be found [here](https://clouddocs.f5.com/containers/latest/userguide/ingress.html)  
 
-  When an Ingress resource is created on BIG-IP using CIS the Ingress resource will `always` be created in the BIG-IP partition for which is defined in the BIG-IP CIS (k8s-bigip1-ctlr-deployment) deployment.  In this example the partition is `kubernetes`
+  When an Ingress resource is created on BIG-IP using CIS the Ingress resource will `always` be created in the BIG-IP partition for which is defined in the BIG-IP CIS (k8s-bigip1-ctlr-deployment) deployment.  In this example the partition is `kubernetes`  
 
     [Link to 3-web-ingress.yaml file ](https://github.com/grmarxer/kubernetes/blob/master/Documentation/Ingress_Resource/yaml-files/3-web-ingress.yaml)  
     <br/>  

@@ -10,9 +10,7 @@ In this procedure we will provide an overview of the Kubernetes Ingress Resource
 
 ## Kubernetes Ingress Overview   
 
-External Sources: [What is Kubernetes Ingress?](https://www.ibm.com/cloud/blog/kubernetes-ingress#:~:text=is%20it%20useful%3F-,Kubernetes%20Ingress%20is%20an%20API%20object%20that%20provides%20routing%20rules,each%20service%20on%20the%20node.) and [Kubernetes Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)  
-
-[F5 CIS Ingress services documentation](https://clouddocs.f5.com/containers/latest/userguide/ingress.html)  
+External Sources: [What is Kubernetes Ingress?](https://www.ibm.com/cloud/blog/kubernetes-ingress#:~:text=is%20it%20useful%3F-,Kubernetes%20Ingress%20is%20an%20API%20object%20that%20provides%20routing%20rules,each%20service%20on%20the%20node.) and [Kubernetes Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/); [F5 CIS Ingress services documentation](https://clouddocs.f5.com/containers/latest/userguide/ingress.html)  
 
 <br/>  
 

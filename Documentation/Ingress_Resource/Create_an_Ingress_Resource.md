@@ -212,7 +212,7 @@ In the following steps we will create a simple deployment using two google image
 
           - In this example we have added the argument `"--default-ingress-ip=172.16.10.90"` to our k8s-bigip1-ctlr-deployment.  Thus if the user rems out the `virtual-server.f5.com/ip: 172.16.10.100` annotation and selects the `virtual-server.f5.com/ip: "controller-default"` annotation in yaml file below the `default-ingress-ip` of `172.16.10.90` will be assigned as the VIP listener.  
 
-          __Note:__ You can only use one or the other in a Ingress Resource definition, either specify the VIP specifically or use the controller default  
+            __Note:__ You can only use one or the other in a Ingress Resource definition, either specify the VIP specifically or use the controller default  
 
 
     [Link to 3-web-ingress.yaml file ](https://github.com/grmarxer/kubernetes/blob/master/Documentation/Ingress_Resource/yaml-files/3-web-ingress.yaml)  

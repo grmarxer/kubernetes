@@ -2,6 +2,12 @@
 
 <br/>  
 
+## Summary  
+
+In this procedure we will provide an overview of the Kubernetes Ingress Resource and provide instructions for configuring a Kubernetes Ingress Resource using BIG-IP and CIS as the ingress controller.  
+
+<br/>  
+
 ## Kubernetes Ingress Overview   
 
 Sources: [What is Kubernetes Ingress?](https://www.ibm.com/cloud/blog/kubernetes-ingress#:~:text=is%20it%20useful%3F-,Kubernetes%20Ingress%20is%20an%20API%20object%20that%20provides%20routing%20rules,each%20service%20on%20the%20node.) and [Kubernetes Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)  
@@ -59,9 +65,13 @@ spec:
 
 As an analogy, if Kubernetes Ingress is a computer, then Ingress Controller is a programmer using the computer and taking action. Furthermore, Ingress Rules act as the manager who directs the programmer to do the work using the computer. Ingress Rules are a set of rules for processing inbound HTTP traffic. An Ingress with no rules sends all traffic to a single default backend service. 
 
-Looking deeper, the Ingress Controller is an application that runs in a Kubernetes cluster and configures an HTTP load balancer according to Ingress Resources. The load balancer can be a software load balancer running in the cluster or a hardware or cloud load balancer running externally. Different load balancers require different Ingress Controller implementations.  
+Looking deeper, the Ingress Controller is an application that runs in a Kubernetes cluster and configures an HTTP load balancer according to Ingress Resources. __The load balancer can be a software load balancer running in the cluster or a hardware or cloud load balancer running externally. Different load balancers require different Ingress Controller implementations.__    
 
+<br/>  
 
+## Creating a Ingress Resource using BIG-IP and CIS   
+
+In the following steps we will create a simple deployment using two google images and demonstrate L7 (host and url) load balancing with CIS and BIG-IP using the Ingress Resource.
 
 <br/>  
 <br/>  

@@ -199,11 +199,15 @@ In the following steps we will create a simple deployment using two google image
 
 3.  Create an Ingress resource for the 2-web-service.yaml created above.  In order to create an Ingress resource using CIS and BIG-IP you need to define the necessary BIG-IP annotations in the Ingress resource.  
 
-    - A complete list of the BIG-IP Ingress Resource annotations can be found [here](https://clouddocs.f5.com/containers/latest/userguide/ingress.html#ingress-resources)  
+    - A complete list of the `BIG-IP Ingress Resource annotations` can be found [here](https://clouddocs.f5.com/containers/latest/userguide/ingress.html#ingress-resources)  
 
     - The `k8s-bigip1-ctlr-deployment` (setup_cis_bigip1.yaml) file referenced below can be found [here](https://github.com/grmarxer/kubernetes/blob/master/Documentation/Ingress_Resource/yaml-files/setup_cis_bigip1.yaml)  
 
     When an Ingress resource is created on BIG-IP using CIS the Ingress resource will `always` be created in the BIG-IP partition defined in the BIG-IP CIS (k8s-bigip1-ctlr-deployment) deployment.  In this example the partition is `"--bigip-partition=kubernetes"`  
+
+    There are two ways to assign the VIP IP address using the Ingress resource and we demonstrate the text for both in this example.  Currently the text will assign the specific IP address `172.16.10.100` because `controller-default` is remmed out.    
+      - The kubernetes Ingress resource traditionally uses the ingress controllers default IP address as the listener.  This is normally the IP address on the public side interface.  BIG-IP/CIS also supports a "default IP" for the Ingress resource listener.  Since BIG-IP/CIS cannot simply know what IP address to use as the "default IP" we must assign the IP address to be used as the "default IP" in the k8s-bigip1-ctlr-deployment as an argument.  In this example we have added the argument `"--default-ingress-ip=172.16.10.90"` to our k8s-bigip1-ctlr-deployment.  Thus if the user rems out the `virtual-server.f5.com/ip: 172.16.10.100` annotation and selects the `virtual-server.f5.com/ip: "controller-default"` annotation in the Ingress Resource below the `default-ingress-ip` of `172.16.10.90` will be assigned as the VIP listener.  
+
 
     [Link to 3-web-ingress.yaml file ](https://github.com/grmarxer/kubernetes/blob/master/Documentation/Ingress_Resource/yaml-files/3-web-ingress.yaml)  
     <br/>  

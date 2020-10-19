@@ -222,10 +222,9 @@ In the following steps we will create a simple deployment using two google image
 
 
     <br/>  
-    
-    [Link to 3-web-ingress.yaml file ](https://github.com/grmarxer/kubernetes/blob/master/Documentation/Ingress_Resource/yaml-files/3-web-ingress.yaml)  
-    <br/>  
 
+    [Link to 3-web-ingress.yaml file ](https://github.com/grmarxer/kubernetes/blob/master/Documentation/Ingress_Resource/yaml-files/3-web-ingress.yaml)  
+ 
     ```
     vi 3-web-ingress.yaml
     ```  

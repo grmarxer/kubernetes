@@ -78,123 +78,123 @@ In the following steps we will create a simple deployment using two google image
 1.  In this step we will create two deployments in a single yaml file, web and web1.  Web will use the google image `gcr.io/google-samples/hello-app:1.0` and will produce a "version 1" web page when the path "/" is curled.  Web1 will use the google image `gcr.io/google-samples/hello-app:2.0` and will produce a "version 2" web page when the path "/v2" is curled.  
 <br/>  
 
-```
-vi 1-web-deployment.yaml
-```  
+    ```
+    vi 1-web-deployment.yaml
+    ```  
 
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: web
-  namespace: default
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: web
-  template:
+    ```yaml
+    apiVersion: apps/v1
+    kind: Deployment
     metadata:
-      labels:
-        app: web
+      name: web
+      namespace: default
     spec:
-      containers:
-      - env:
-        - name: web
-          value: web
-        image: gcr.io/google-samples/hello-app:1.0
-        imagePullPolicy: Always
-        name: web
-        ports:
-        - containerPort: 8080
-          protocol: TCP
+      replicas: 1
+      selector:
+        matchLabels:
+          app: web
+      template:
+        metadata:
+          labels:
+            app: web
+        spec:
+          containers:
+          - env:
+            - name: web
+              value: web
+            image: gcr.io/google-samples/hello-app:1.0
+            imagePullPolicy: Always
+            name: web
+            ports:
+            - containerPort: 8080
+              protocol: TCP
 
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: web1
-  namespace: default
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: web1
-  template:
+    ---
+    apiVersion: apps/v1
+    kind: Deployment
     metadata:
-      labels:
-        app: web1
+      name: web1
+      namespace: default
     spec:
-      containers:
-      - env:
-        - name: web1
-          value: web1
-        image: gcr.io/google-samples/hello-app:2.0
-        imagePullPolicy: Always
-        name: web1
-        ports:
-        - containerPort: 8080
-          protocol: TCP
-```  
-```
-kubectl create -f 1-web-deployment.yaml
-```  
+      replicas: 1
+      selector:
+        matchLabels:
+          app: web1
+      template:
+        metadata:
+          labels:
+            app: web1
+        spec:
+          containers:
+          - env:
+            - name: web1
+              value: web1
+            image: gcr.io/google-samples/hello-app:2.0
+            imagePullPolicy: Always
+            name: web1
+            ports:
+            - containerPort: 8080
+              protocol: TCP
+    ```  
+    ```
+    kubectl create -f 1-web-deployment.yaml
+    ```  
 
 
 
 2. Create a service for the vi 1-web-deployment.yaml deployment.  We will use `ClusterIP` but `NodePort` may also be used.  
 
-```
-vi 2-web-service.yaml
-```  
 
+    ```
+    vi 2-web-service.yaml
+    ```    
 
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: web
-  namespace: default
-  labels:
-    app: web
-spec:
-  ports:
-  - name: web
-    port: 8080
-    protocol: TCP
-    targetPort: 8080
-  type: ClusterIP
-  selector:
-    app: web
+    ```yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: web
+      namespace: default
+      labels:
+        app: web
+    spec:
+      ports:
+      - name: web
+        port: 8080
+        protocol: TCP
+        targetPort: 8080
+      type: ClusterIP
+      selector:
+        app: web
 
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: web1
-  namespace: default
-  labels:
-    app: web1
-spec:
-  ports:
-  - name: web1
-    port: 8080
-    protocol: TCP
-    targetPort: 8080
-  type: ClusterIP
-  selector:
-    app: web1
-```   
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: web1
+      namespace: default
+      labels:
+        app: web1
+    spec:
+      ports:
+      - name: web1
+        port: 8080
+        protocol: TCP
+        targetPort: 8080
+      type: ClusterIP
+      selector:
+        app: web1
+    ```   
 
-```
-kubectl create -f 2-web-service.yaml
-```  
+    ```
+    kubectl create -f 2-web-service.yaml
+    ```  
 
 3.  Create an Ingress resource for the 2-web-service.yaml created above  
 
-```
-vi 3-web-ingress.yaml
-```  
+    ```
+    vi 3-web-ingress.yaml
+    ```  
 
 ```yaml
 apiVersion: extensions/v1beta1
@@ -255,13 +255,14 @@ spec:
             servicePort: 8080
 ```  
 
-```
-kubectl create -f 3-web-ingress.yaml
-```  
+
+    ```
+    kubectl create -f 3-web-ingress.yaml
+    ```  
 
 4.  To delete an Ingress Resource all you have to do is delete the Ingress Resource created above   
 
-```
-kubectl delete -f 3-web-ingress.yaml
-```  
+    ```
+    kubectl delete -f 3-web-ingress.yaml
+    ```  
 

@@ -108,7 +108,7 @@ In the following steps we will create a simple deployment using two google image
             ports:
             - containerPort: 8080
               protocol: TCP
-
+    
     ---
     apiVersion: apps/v1
     kind: Deployment
@@ -256,9 +256,9 @@ spec:
 ```  
 
 
-    ```
-    kubectl create -f 3-web-ingress.yaml
-    ```  
+```
+kubectl create -f 3-web-ingress.yaml
+```  
 
 4.  To delete an Ingress Resource all you have to do is delete the Ingress Resource created above   
 

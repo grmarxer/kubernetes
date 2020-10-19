@@ -218,7 +218,7 @@ In the following steps we will create a simple deployment using two google image
 
     - As you add additional backend resources (pools) you can additional monitors specific to that pool by adding additional json blobs under the `virtual-server.f5.com/health` annotation.  
     - When using `host` in your rules (under spec), you link the monitor to the correct backend service (pool) by using the `path` in the health monitor.  The path in the health monitor links to the backend resource service via the `hostname` and the URL `path`, (Example `web1svc.example.com/v2`)  
-    - If you are not using `host` in your rules then you use the ServiceName and URL path to link the monitor to the backend resource, (Example web1/v2)  
+      - If you are not using `host` in your rules then you use the serviceName and URL path to link the monitor to the backend resource, (Example web1/v2)  
 
 
 

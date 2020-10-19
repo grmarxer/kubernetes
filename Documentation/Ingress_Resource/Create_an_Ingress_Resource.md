@@ -10,7 +10,9 @@ In this procedure we will provide an overview of the Kubernetes Ingress Resource
 
 ## Kubernetes Ingress Overview   
 
-Sources: [What is Kubernetes Ingress?](https://www.ibm.com/cloud/blog/kubernetes-ingress#:~:text=is%20it%20useful%3F-,Kubernetes%20Ingress%20is%20an%20API%20object%20that%20provides%20routing%20rules,each%20service%20on%20the%20node.) and [Kubernetes Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)  
+External Sources: [What is Kubernetes Ingress?](https://www.ibm.com/cloud/blog/kubernetes-ingress#:~:text=is%20it%20useful%3F-,Kubernetes%20Ingress%20is%20an%20API%20object%20that%20provides%20routing%20rules,each%20service%20on%20the%20node.) and [Kubernetes Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)  
+
+[F5 CIS Ingress services documentation](https://clouddocs.f5.com/containers/latest/userguide/ingress.html)  
 
 <br/>  
 
@@ -200,8 +202,6 @@ In the following steps we will create a simple deployment using two google image
 3.  Create an Ingress resource for the 2-web-service.yaml created above.  In order to create an Ingress resource using CIS and BIG-IP you need to define the necessary BIG-IP annotations in the Ingress resource.  
 
     - A complete list of the BIG-IP Ingress Resource annotations can be found [here](https://clouddocs.f5.com/containers/latest/userguide/ingress.html#ingress-resources)  
-
-    - F5 CIS Ingress services documentation can be found [here](https://clouddocs.f5.com/containers/latest/userguide/ingress.html)  
 
     - The `k8s-bigip1-ctlr-deployment` (setup_cis_bigip1.yaml) file referenced below can be found [here](https://github.com/grmarxer/kubernetes/blob/master/Documentation/Ingress_Resource/yaml-files/setup_cis_bigip1.yaml)  
 

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - env:
+        - name: web
+          value: web
+        image: gcr.io/google-samples/hello-app:1.0
+        imagePullPolicy: Always
+        name: web
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web1
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web1
+  template:
+    metadata:
+      labels:
+        app: web1
+    spec:
+      containers:
+      - env:
+        - name: web1
+          value: web1
+        image: gcr.io/google-samples/hello-app:2.0
+        imagePullPolicy: Always
+        name: web1
+        ports:
+        - containerPort: 8080
+          protocol: TCP

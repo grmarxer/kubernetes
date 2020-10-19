@@ -221,7 +221,7 @@ In the following steps we will create a simple deployment using two google image
       - If you are not using `host` in your rules then you use the serviceName and URL path to link the monitor to the backend resource, (Example web1/v2)  
 
 
-
+    <br/>  
     [Link to 3-web-ingress.yaml file ](https://github.com/grmarxer/kubernetes/blob/master/Documentation/Ingress_Resource/yaml-files/3-web-ingress.yaml)  
     <br/>  
 

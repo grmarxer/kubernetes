@@ -207,15 +207,8 @@ metadata:
   name: ingress-f5
   namespace: default
   annotations:
-# the partition used here must be the same one assigned in the BIG-IP controller deployment
     virtual-server.f5.com/partition: "kubernetes"
 #
-#  "virtual-server.f5.com/ip:" is how the VIP gets assigned to BIG-IP, you can either choose a specific VIP (ex. 172.16.10.100) or use the controller default option,
-#  controller default is what you are accustom to with NGINX.  In order to use controller default you must add the following argument to the BIG-IP controller deployment
-#  ("--default-ingress-ip=172.16.10.90")  the IP address assigned here will be used as the VIP IP whenever the annotation (virtual-server.f5.com/ip: "controller-default") is set.
-#  You can only use on or the other in a deployment, either specify the VIP specifically or use the controller default
-#
-#  Use one or the other, in this example I am specifying the VIP IP as "172.16.10.100"
     virtual-server.f5.com/ip: 172.16.10.100
 #    virtual-server.f5.com/ip: "controller-default"
 #
@@ -268,8 +261,17 @@ kubectl create -f 3-web-ingress.yaml
 4.  To delete an Ingress Resource all you have to do is delete the Ingress Resource created above   
 
     <br/>  
-    
+
     ```
     kubectl delete -f 3-web-ingress.yaml
     ```  
 
+
+
+#
+#  "virtual-server.f5.com/ip:" is how the VIP gets assigned to BIG-IP, you can either choose a specific VIP (ex. 172.16.10.100) or use the controller default option,
+#  controller default is what you are accustom to with NGINX.  In order to use controller default you must add the following argument to the BIG-IP controller deployment
+#  ("--default-ingress-ip=172.16.10.90")  the IP address assigned here will be used as the VIP IP whenever the annotation (virtual-server.f5.com/ip: "controller-default") is set.
+#  You can only use on or the other in a deployment, either specify the VIP specifically or use the controller default
+#
+#  Use one or the other, in this example I am specifying the VIP IP as "172.16.10.100"

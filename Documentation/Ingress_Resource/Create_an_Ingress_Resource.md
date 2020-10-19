@@ -141,9 +141,11 @@ In the following steps we will create a simple deployment using two google image
     ```  
 
 
+<br/>  
 
 2. Create a service for the vi 1-web-deployment.yaml deployment.  We will use `ClusterIP` but `NodePort` may also be used.  
 
+    <br/>  
 
     ```
     vi 2-web-service.yaml
@@ -189,8 +191,10 @@ In the following steps we will create a simple deployment using two google image
     ```
     kubectl create -f 2-web-service.yaml
     ```  
+<br/>   
 
 3.  Create an Ingress resource for the 2-web-service.yaml created above  
+    <br/>  
 
     ```
     vi 3-web-ingress.yaml
@@ -259,9 +263,12 @@ spec:
 ```
 kubectl create -f 3-web-ingress.yaml
 ```  
+<br/>  
 
 4.  To delete an Ingress Resource all you have to do is delete the Ingress Resource created above   
 
+    <br/>  
+    
     ```
     kubectl delete -f 3-web-ingress.yaml
     ```  

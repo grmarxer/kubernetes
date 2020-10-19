@@ -217,7 +217,7 @@ In the following steps we will create a simple deployment using two google image
 
             __Note:__ You can only use one or the other in a Ingress Resource definition, either specify the VIP specifically or use the controller default  
 
-    __Additional Items to note in the example below__   
+    __Additional Items to Note in the Example Below__   
 
     - As you add additional backend resources (pools) you can additional monitors specific to that pool by adding additional json blobs under the `virtual-server.f5.com/health` annotation.  
     - When using `host` in your rules (under spec), you link the monitor to the correct backend service (pool) by using the `path` in the health monitor.  The path in the health monitor links to the backend resource service via the `hostname` and the URL `path`, (Example `web1svc.example.com/v2`)  

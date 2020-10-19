@@ -146,10 +146,12 @@ In the following steps we will create a simple deployment using two google image
 <br/>  
 
 2. Create a service for the vi 1-web-deployment.yaml deployment.  We will use `ClusterIP` but `NodePort` may also be used.  
+    <br/>  
+    
 
     [Link to 2-web-service.yaml file ](https://github.com/grmarxer/kubernetes/blob/master/Documentation/Ingress_Resource/yaml-files/2-web-service.yaml)  
 
-    <br/>  
+
 
     ```
     vi 2-web-service.yaml

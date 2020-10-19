@@ -199,9 +199,9 @@ In the following steps we will create a simple deployment using two google image
 
 3.  Create an Ingress resource for the 2-web-service.yaml created above.  In order to create an Ingress resource using CIS and BIG-IP you need to define the necessary BIG-IP annotations in the Ingress resource.  
 
-    A complete list of the BIG-IP Ingress Resource annotations can be found [here](https://clouddocs.f5.com/containers/latest/userguide/ingress.html#ingress-resources)  
+    - A complete list of the BIG-IP Ingress Resource annotations can be found [here](https://clouddocs.f5.com/containers/latest/userguide/ingress.html#ingress-resources)  
 
-    F5 CIS Ingress services documentation can be found [here](https://clouddocs.f5.com/containers/latest/userguide/ingress.html)  
+    - F5 CIS Ingress services documentation can be found [here](https://clouddocs.f5.com/containers/latest/userguide/ingress.html)  
 
     [Link to 3-web-ingress.yaml file ](https://github.com/grmarxer/kubernetes/blob/master/Documentation/Ingress_Resource/yaml-files/3-web-ingress.yaml)  
     <br/>  

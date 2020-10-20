@@ -144,14 +144,14 @@ In the following steps we will create a simple deployment using two google image
     ```  
 
     ```
-    root@kube5:~/ingress-type-example/test# kubectl get deployment
+    root@kube5:# kubectl get deployment
     NAME   READY   UP-TO-DATE   AVAILABLE   AGE
     web    1/1     1            1           33s
     web1   1/1     1            1           33s
     ```
 
     ```
-    root@kube5:~/ingress-type-example/test# kubectl get pods
+    root@kube5:# kubectl get pods
     NAME                    READY   STATUS    RESTARTS   AGE
     web-595bd448fd-mbgt5    1/1     Running   0          56s
     web1-7bd77cfb57-8lsf6   1/1     Running   0          56s

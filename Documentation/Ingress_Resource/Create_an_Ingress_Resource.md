@@ -144,14 +144,14 @@ In the following steps we will create a simple deployment using two google image
     ```  
 
     ```
-    root@kube5:# kubectl get deployment
+    @kube5:# kubectl get deployment
     NAME   READY   UP-TO-DATE   AVAILABLE   AGE
     web    1/1     1            1           33s
     web1   1/1     1            1           33s
     ```
 
     ```
-    root@kube5:# kubectl get pods
+    @kube5:# kubectl get pods
     NAME                    READY   STATUS    RESTARTS   AGE
     web-595bd448fd-mbgt5    1/1     Running   0          56s
     web1-7bd77cfb57-8lsf6   1/1     Running   0          56s
@@ -215,7 +215,7 @@ In the following steps we will create a simple deployment using two google image
     ```  
 
     ```
-    root@kube5:# kubectl get service | grep web
+    @kube5:# kubectl get service | grep web
     web          ClusterIP   10.104.226.240   <none>        8080/TCP   24s
     web1         ClusterIP   10.101.247.36    <none>        8080/TCP   24s
     ```  
@@ -313,11 +313,28 @@ In the following steps we will create a simple deployment using two google image
     ```  
 
     ```
-    root@kube5:# kubectl get ingress
+    @kube5:# kubectl get ingress
     NAME         HOSTS                                    ADDRESS         PORTS   AGE
     ingress-f5   websvc.example.com,web1svc.example.com   172.16.10.100   80      10s
     ```  
-    
+
+    ```
+    [@centos1 ~]# curl -H "Host: websvc.example.com" http://172.16.10.100/
+    Hello, world!
+    Version: 1.0.0
+    Hostname: web-595bd448fd-mbgt5
+    ```  
+
+    ```
+    [@centos1 ~]# curl -H "Host: web1svc.example.com" http://172.16.10.100/v2
+    Hello, world!
+    Version: 2.0.0
+    Hostname: web1-7bd77cfb57-8lsf6
+    ```  
+
+
+
+
 
 <br/>  
 

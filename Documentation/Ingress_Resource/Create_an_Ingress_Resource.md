@@ -258,6 +258,43 @@ In the following steps we will create a simple deployment using two google image
     - When using `host` in your rules (under spec), you link the monitor to the correct backend service (pool) by using the `path` in the health monitor.  The path in the health monitor links to the backend resource service via the `hostname` and the `URL path`, (Example: `web1svc.example.com/v2`)  
 
       - If you are not using `host` in your rules then you use the `serviceName` and `URL path` to link the monitor to the backend resource, (Example: `web1/v2`)  
+        ```
+        virtual-server.f5.com/health: |
+        [
+          {
+            "path": "web/",
+            "send": "GET / HTTP/1.1\r\nHost: \r\nConnection: Close:\r\n\r\n",
+            "recv": "200",
+            "interval": 5,
+            "timeout":  10,
+            "type": "http"
+          },
+          {
+            "path": "web1/v2",
+            "send": "GET /v2 HTTP/1.1\r\nHost: \r\nConnection: Close:\r\n\r\n",
+            "recv": "200",
+            "interval": 5,
+            "timeout":  10,
+            "type": "http"
+          }
+        ]
+
+        spec:
+          rules:
+          - http:
+              paths:
+              - path: /
+                backend:
+                    serviceName: web
+                    servicePort: 8080
+          - http:
+              paths:
+              - path: /v2
+                backend:
+                    serviceName: web1
+                    servicePort: 8080
+        ```  
+
 
 
     <br/>  

@@ -359,6 +359,12 @@ In the following steps we will create a simple deployment using two google image
     kubectl delete -f 3-web-ingress.yaml
     ```  
 
+    ```
+    @kube5:# kubectl get ingress
+    No resources found in default namespace.
+    ```  
+
+
 
 
 

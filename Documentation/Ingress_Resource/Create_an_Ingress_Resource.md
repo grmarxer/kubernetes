@@ -213,6 +213,13 @@ In the following steps we will create a simple deployment using two google image
     ```
     kubectl create -f 2-web-service.yaml
     ```  
+    
+    ```
+    root@kube5:~/ingress-type-example/test# kubectl get service | grep web
+    web          ClusterIP   10.104.226.240   <none>        8080/TCP   24s
+    web1         ClusterIP   10.101.247.36    <none>        8080/TCP   24s
+    ```  
+
 <br/>   
 
 3.  Create an Ingress resource definition for the 2-web-service.yaml created above.  In order to create an Ingress resource using CIS and BIG-IP you need to define the necessary BIG-IP annotations in the Ingress resource definition.  

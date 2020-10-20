@@ -213,9 +213,9 @@ In the following steps we will create a simple deployment using two google image
     ```
     kubectl create -f 2-web-service.yaml
     ```  
-    
+
     ```
-    root@kube5:~/ingress-type-example/test# kubectl get service | grep web
+    root@kube5:# kubectl get service | grep web
     web          ClusterIP   10.104.226.240   <none>        8080/TCP   24s
     web1         ClusterIP   10.101.247.36    <none>        8080/TCP   24s
     ```  
@@ -311,6 +311,14 @@ In the following steps we will create a simple deployment using two google image
     ```
     kubectl create -f 3-web-ingress.yaml
     ```  
+
+    ```
+    root@kube5:# kubectl get ingress
+    NAME         HOSTS                                    ADDRESS         PORTS   AGE
+    ingress-f5   websvc.example.com,web1svc.example.com   172.16.10.100   80      10s
+    ```  
+    
+
 <br/>  
 
 4.  To delete an Ingress Resource all you have to do is delete the Ingress Resource created above   

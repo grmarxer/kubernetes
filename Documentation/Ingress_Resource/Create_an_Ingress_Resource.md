@@ -262,14 +262,6 @@ In the following steps we will create a simple deployment using two google image
         virtual-server.f5.com/health: |
         [
           {
-            "path": "web/",
-            "send": "GET / HTTP/1.1\r\nHost: \r\nConnection: Close:\r\n\r\n",
-            "recv": "200",
-            "interval": 5,
-            "timeout":  10,
-            "type": "http"
-          },
-          {
             "path": "web1/v2",
             "send": "GET /v2 HTTP/1.1\r\nHost: \r\nConnection: Close:\r\n\r\n",
             "recv": "200",
@@ -281,12 +273,6 @@ In the following steps we will create a simple deployment using two google image
 
         spec:
           rules:
-          - http:
-              paths:
-              - path: /
-                backend:
-                    serviceName: web
-                    servicePort: 8080
           - http:
               paths:
               - path: /v2

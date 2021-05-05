@@ -411,7 +411,7 @@ Confirm the CIS POD is up
 
 ```kubectl get pods --all-namespaces -o wide | grep bigip1```  
 <br/>   
-__Note:__ With this deployment CIS will manually create the fdb entries for your kube nodes on the BIG-IP.  
+__IMPORTANT:__  Once CIS is up and running it will write the vxlan fdb entries to the BIG-IP Configuration for the different kube nodes.  
 
 ```
 tmsh show net fdb tunnel flannel_vxlan
